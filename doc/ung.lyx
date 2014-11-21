@@ -1,0 +1,216 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+UNG
+\end_layout
+
+\begin_layout Title
+UNG Not Gerris
+\end_layout
+
+\begin_layout Author
+P.
+ D.
+ Rosenberg
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+UNG is a library/Source code/program for modelling fluid flow and the atmosphere.
+ It was written with the prmary requirement that it is easy to use and add
+ new features.
+ This means that it might not be the fastest model around but hopefully
+ its other advantages will outweigh that fact.
+ It was also built with the idea of 
+\begin_inset Quotes eld
+\end_inset
+
+seamlessness
+\begin_inset Quotes erd
+\end_inset
+
+ in mind, because the aim is that the model will have adaptive resolution,
+ meaning any features must work at all scales.
+\end_layout
+
+\begin_layout Subsection
+Where does the name UNG come from?
+\end_layout
+
+\begin_layout Standard
+UNG Not Gerris arises from the fact that I was playing with an adaptive
+ resolution flow model called Gerris and wondered about whether it could
+ be made to do atmospheric simulations.
+ After a while I decided probably not, so I wrote my own model.
+ I was also tickled by the fact that it was a recursive acronym that was
+ the reverse of GNU, but this software is nothing to do with GNU.
+\end_layout
+
+\begin_layout Subsection
+So you want to make this model easy to use and add to, what makes this the
+ case?
+\end_layout
+
+\begin_layout Standard
+UNG is object oriented.
+ This means that instead or representing the data within the model by a
+ series of matrices and then doing matric maths on them the model contains
+ groups of objects which interact with each other.
+ If you wish to modify the behaviour of UNG you create a new object which
+ inherits from one of the existing ones which then simply replaces the default
+ objects.
+ You can even mix and match different types of objects in a simulation.
+\end_layout
+
+\begin_layout Subsection
+What are these objects then?
+\end_layout
+
+\begin_layout Standard
+There are three basic object types (called classes).
+ These are Cells, Links and Simulations.
+ When you wish to do a model run you create a Simulation.
+ This Simulation contains a series of Cells and these Cells are connected
+ to each other by Links.
+ By inheriting from these classes you can modify the behaviour of an UNG
+ run.
+ These basic types divide the labour of the simulation making things easy
+ to modify.
+ A Cell knows only about the property of the fluid within it, so contains
+ things like values for the concentration of tracers, the Cell's mass and
+ size and has functions for calculating derived properties such as temperature
+ and pressure.
+ Anything that applies to a parcel of fluid in isolation is dealt with within
+ a Cell object.
+ By comparison, the Link knows nothing about the properties of the fluid
+ itself, it's job is to tell the Cells about forces being applied to them
+ by neighbouring Cells and how much material is being passed between Cells
+ by the fluid flow.
+ The properties advected between Cells are passed through links, but they
+ are opaque to the Links themselves - the Links receive the properties of
+ the advected material, and pass this to the Cell receiving the material
+ but a Link is not able to access or interpret the values passed.
+ The Simulation is responsible for creating the Cells and the Links and
+ connecting the correct Links to the correct Cells.
+ It is also responsible for incrementing tthe time steps and triggering
+ the calcualtion of the new state, however the calculations themselves are
+ performed by the Links and the Cells.
+\end_layout
+
+\begin_layout Subsection
+What equations is UNG solving?
+\end_layout
+
+\begin_layout Standard
+UNG is essentially solving the compressible Navier Stokes equation, with
+ an assumption of zero viscosity, however, because you are free to generate
+ your own types of link you can change this at will.
+ In one timestep the following things happen.
+\end_layout
+
+\begin_layout Enumerate
+The Links interpolate the flow parallel to their direction from the Cells
+ at either end to determine the volume of flow between cells.
+ They grab the values of the tracer densities from each cell at this point.
+ They also use the pressure of each cell to determine the pressure impulse
+ applied by each cell.
+\end_layout
+
+\begin_layout Enumerate
+The cells request the calculated pressure impulse and use this to calculate
+ the change in velocity.
+ They also request the advected volume and tracer densities and update their
+ tracers accordingly.
+ The tracers used are momentum in the three orthoganal directions, mass
+ and potential energy, which is a combination of heat energy and the energy
+ of compression of the fluid and is defined as the product of potential
+ temperature and mass.
+\end_layout
+
+\begin_layout Enumerate
+The cells momentum is incremented appropriately based upon the speed change
+ calculated from the pressure impulse.
+ The density of all the tracers is calculated.
+\end_layout
+
+\begin_layout Standard
+These three steps are triggered by the Simulation for each time step.
+\end_layout
+
+\begin_layout Subsection
+What language is UNG written in? Can I write add-ons in language XXX
+\end_layout
+
+\begin_layout Standard
+UNG is written in C++.
+ If you want to add bits in another language then it is probably possible,
+ providing you can build your code into a library.
+ This library can then be linked into the UNG code.
+ However you will probably still need to know about C++ to integrate your
+ changes into the object oriented framework used by UNG.
+\end_layout
+
+\end_body
+\end_document
