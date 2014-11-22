@@ -9,6 +9,7 @@ class Link
 {
 public:
 	Link(Cell *cell1, Cell*cell2, UNG_FLT area, const UNG_FLT *speed1, const UNG_FLT *speed2);
+	~Link();
 	virtual void update(UNG_FLT timeStep);
 	virtual void getLinkProperties( const void *&sourceTracerDensities, UNG_FLT &transferVolume, UNG_FLT &parallelImpulse, UNG_FLT &perpendicularImpulse);
 protected:
@@ -17,9 +18,9 @@ protected:
 	Cell *m_cell2;
 	const UNG_FLT * m_speed1; 
 	const UNG_FLT * m_speed2;
-	const void *m_sourceTracerDensities;
 	UNG_FLT m_pressureImpulse;
 	UNG_FLT m_transferVolume;
+	void *m_tracerDensities;
 
 
 	Link();

@@ -2,6 +2,7 @@
 #define UNG_CELL_H
 
 #include"ung.h"
+#include<math.h>
 
 class Link;
 
@@ -36,12 +37,16 @@ public:
 	inline UNG_FLT getLrSpeed() const;
 	inline UNG_FLT getUdSpeed() const;
 	inline UNG_FLT getIoSpeed() const;
+	inline UNG_FLT getTemperature() const;
 	inline const UNG_FLT * getLrSpeedPointer() const;
 	inline const UNG_FLT * getUdSpeedPointer() const;
 	inline const UNG_FLT * getIoSpeedPointer() const;
 	inline UNG_FLT * getLrSpeedStepPointer() const;
 	inline UNG_FLT * getUdSpeedStepPointer() const;
 	inline UNG_FLT * getIoSpeedStepPointer() const;
+	inline size_t getTracerDensitySize() const;
+	virtual void averageTracerDensities( void *dest, void *source1, void *source2 ) const;
+
 private:
 	//these are the fundamental things we need to do the simulation
 	UNG_FLT m_volume;
@@ -135,5 +140,15 @@ inline void Cell::setLeftLink(Link *link)
 inline void Cell::setRightLink(Link *link)
 {
 	m_rightLink=link;
+}
+
+inline size_t Cell::getTracerDensitySize() const
+{
+	return sizeof(CellTracerDensities);
+}
+
+inline UNG_FLT Cell::getTemperature() const
+{
+	return m_potentialEnergy/m_mass*pow(getPressure()/UNG_FLT(100000.0),UNG_FLT(0.286));
 }
 #endif

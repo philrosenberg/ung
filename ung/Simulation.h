@@ -33,6 +33,7 @@ public:
 	void getVerticalSpeeds( UNG_FLT* verticalSpeeds ) const;
 	void getDensities( UNG_FLT* densities ) const;
 	void getPotentialTemperatures( UNG_FLT* potentialTemperatures ) const;
+	void getTemperatures( UNG_FLT* temperatures ) const;
 private:
 	virtual void setupLinks( size_t nHoriz, size_t nVert )=0;
 protected:

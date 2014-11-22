@@ -76,10 +76,17 @@ void RectangularSimulation::getDensities( UNG_FLT* densities ) const
 	for(size_t i=0; i<m_nCells; ++i)
 		densities[i]=m_cells[i]->getDensity();
 }
+
 void RectangularSimulation::getPotentialTemperatures( UNG_FLT* potentialTemperatures ) const
 {
 	for(size_t i=0; i<m_nCells; ++i)
 		potentialTemperatures[i]=m_cells[i]->getPotentialTemperature();
+}
+
+void RectangularSimulation::getTemperatures( UNG_FLT* temperatures ) const
+{
+	for(size_t i=0; i<m_nCells; ++i)
+		temperatures[i]=m_cells[i]->getTemperature();
 }
 
 RectangularSimulationSolidEdges::RectangularSimulationSolidEdges( size_t nHoriz, size_t nVert, const UNG_FLT *densities, const UNG_FLT *potentialTemperatures,

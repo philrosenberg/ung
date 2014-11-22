@@ -108,3 +108,15 @@ void Cell::setLinks(Link *leftLink, Link *rightLink, Link *topLink, Link *bottom
 	m_topLink=topLink;
 	m_bottomLink=bottomLink;
 }
+
+void Cell::averageTracerDensities( void *dest, void *source1, void *source2 ) const
+{
+	CellTracerDensities *destCast=(CellTracerDensities*)dest;
+	CellTracerDensities *source1Cast=(CellTracerDensities*)source1;
+	CellTracerDensities *source2Cast=(CellTracerDensities*)source2;
+	destCast->density=(source1Cast->density+source2Cast->density)/UNG_FLT(2.0);
+	destCast->ioMomentumDensity=(source1Cast->ioMomentumDensity+source2Cast->ioMomentumDensity)/UNG_FLT(2.0);
+	destCast->lrMomentumDensity=(source1Cast->lrMomentumDensity+source2Cast->lrMomentumDensity)/UNG_FLT(2.0);
+	destCast->udMomentumDensity=(source1Cast->udMomentumDensity+source2Cast->udMomentumDensity)/UNG_FLT(2.0);
+	destCast->potentialEnergyDensity=(source1Cast->potentialEnergyDensity+source2Cast->potentialEnergyDensity)/UNG_FLT(2.0);
+}

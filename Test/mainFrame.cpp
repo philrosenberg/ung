@@ -163,7 +163,7 @@ void mainFrame::OnRun( wxCommandEvent& event )
 		sim.getVerticalSpeeds(verticalSpeeds);
 		sim.getDensities(densities);
 		std::fstream fout;
-		fout.open("test4.csv", std::ios::out);
+		fout.open("output/test4.csv", std::ios::out);
 		fout << "density,horizontal speed,vertical speed\n";
 		for(size_t i=0; i<nCells; ++i)
 			fout << densities[i] << "," << horizontalSpeeds[i] << "," << verticalSpeeds[i] << "\n";
@@ -232,59 +232,37 @@ void mainFrame::OnRun( wxCommandEvent& event )
 			densities[i]*=1.0+sci::distribution::normal(double(i),double(peakWidth*3),double(peakWidth))*peakWidth*sqrt(2*M_PI)*1e-5; 
 
 		std::fstream foutinit;
-		foutinit.open("test5init.csv", std::ios::out);
+		foutinit.open("output/test5init.csv", std::ios::out);
 		foutinit << "density\n";
 		for(size_t i=0; i<nCells; ++i)
 			foutinit << densities[i]-1.0 << "\n";
 		foutinit.close();
 
 		RectangularSimulationWrappedEdges sim(nHoriz, nVert, densities, nullptr, nullptr, nullptr);
-		for(size_t i=0; i<2000000; ++i)
+		for(size_t i=0; i<100001; ++i)
 		{
 			if(i%10000==0)
 			{
 				UNG_FLT verticalSpeeds[nCells];
 				UNG_FLT horizontalSpeeds[nCells];
+				UNG_FLT temperatures[nCells];
 				sim.getHorizontalSpeeds(horizontalSpeeds);
 				sim.getVerticalSpeeds(verticalSpeeds);
+				sim.getTemperatures(temperatures);
 				sim.getDensities(densities);
 				char filename[200];
-				strcpy(filename,"test5_");
+				strcpy(filename,"output/test5_");
 				itoa(i,filename+strlen(filename),10);
 				strcat(filename,".csv");
 				std::fstream fout;
 				fout.open(filename, std::ios::out);
-				fout << "density,horizontal speed,vertical speed\n";
-				for(size_t i=0; i<nCells; ++i)
-					fout << densities[i]-1.0 << "," << horizontalSpeeds[i] << "," << verticalSpeeds[i] << "\n";
+				fout << "density,temperature,horizontal speed,vertical speed\n";
+				for(size_t j=0; j<nCells; ++j)
+					fout << densities[j]-1.0 << "," << temperatures[j] << ","<< horizontalSpeeds[j] << "," << verticalSpeeds[j] << "\n";
 				fout.close();
 			}
 			sim.Step(UNG_FLT(0.00001));
 		}
-		UNG_FLT verticalSpeeds[nCells];
-		UNG_FLT horizontalSpeeds[nCells];
-		sim.getHorizontalSpeeds(horizontalSpeeds);
-		sim.getVerticalSpeeds(verticalSpeeds);
-		sim.getDensities(densities);
-		std::fstream fout;
-		fout.open("test5.csv", std::ios::out);
-		fout << "density,horizontal speed,vertical speed\n";
-		for(size_t i=0; i<nCells; ++i)
-			fout << densities[i]-1.0 << "," << horizontalSpeeds[i] << "," << verticalSpeeds[i] << "\n";
-		fout.close();
-		/*for(size_t i=0; i<25; ++i)
-		{
-			if(i%nHoriz==fastCol)
-			{
-				if(verticalSpeeds[i]!=2.0)
-					throw("Failed Test3 - fast row vertical speed check");
-			}
-			else if( verticalSpeeds[i]!=1.0)
-				throw("Failed Test3 - slow row vertical speed check");
-		}
-		for(size_t i=0; i<25; ++i)
-			if(horizontalSpeeds[i]!=0)
-				throw("Failed Test3 - horizontal speed check");*/
 	}
 #endif
 	wxMessageBox("Done - Tests successful");
