@@ -246,10 +246,12 @@ void mainFrame::OnRun( wxCommandEvent& event )
 				UNG_FLT verticalSpeeds[nCells];
 				UNG_FLT horizontalSpeeds[nCells];
 				UNG_FLT temperatures[nCells];
+				UNG_FLT pressures[nCells];
 				sim.getHorizontalSpeeds(horizontalSpeeds);
 				sim.getVerticalSpeeds(verticalSpeeds);
 				sim.getTemperatures(temperatures);
 				sim.getDensities(densities);
+				//sim.getPressures(pressures);
 				char filename[200];
 				strcpy(filename,"output/test5_");
 				itoa(i,filename+strlen(filename),10);

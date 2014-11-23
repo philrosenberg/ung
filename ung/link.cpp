@@ -18,7 +18,7 @@ Link::~Link()
 void Link::update(UNG_FLT timeStep)
 {
 	UNG_FLT pressureDif=(m_cell2->getPressure()-m_cell1->getPressure());
-	m_pressureImpulse=-m_area*pressureDif*timeStep;
+	m_pressureImpulse=-m_area*pressureDif*timeStep/UNG_FLT(2.0);
 	UNG_FLT transferSpeed=(*m_speed1+*m_speed2)/UNG_FLT(2.0);
 	UNG_FLT transferDistance=transferSpeed*timeStep;
 	m_transferVolume=transferDistance*m_area;
