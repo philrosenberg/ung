@@ -224,29 +224,23 @@ void mainFrame::OnRun( wxCommandEvent& event )
 		const size_t nHoriz=1000;
 		const size_t nVert=1;
 		const size_t nCells=nHoriz*nVert;
-		UNG_FLT densities[nCells];
 		size_t peakWidth=20;
+
+		UNG_FLT densities[nCells];
+		UNG_FLT verticalSpeeds[nCells];
+		UNG_FLT horizontalSpeeds[nCells];
+		UNG_FLT temperatures[nCells];
 		for(size_t i=0; i<nCells; ++i)
 			densities[i]=1.0;
-		for (size_t i=0; i<peakWidth*6; ++i)
-			densities[i]*=1.0+sci::distribution::normal(double(i),double(peakWidth*3),double(peakWidth))*peakWidth*sqrt(2*M_PI)*1e-5; 
-
-		std::fstream foutinit;
-		foutinit.open("output/test5init.csv", std::ios::out);
-		foutinit << "density\n";
-		for(size_t i=0; i<nCells; ++i)
-			foutinit << densities[i]-1.0 << "\n";
-		foutinit.close();
+		for (size_t i=0; i<nHoriz; ++i)
+			densities[i]*=1.0+sci::distribution::normal(double(i),double(nHoriz)/2.0-0.5,double(peakWidth))*peakWidth*sqrt(2*M_PI)*1e-5; 
 
 		RectangularSimulationWrappedEdges sim(nHoriz, nVert, densities, nullptr, nullptr, nullptr);
+
 		for(size_t i=0; i<100001; ++i)
 		{
 			if(i%10000==0)
 			{
-				UNG_FLT verticalSpeeds[nCells];
-				UNG_FLT horizontalSpeeds[nCells];
-				UNG_FLT temperatures[nCells];
-				UNG_FLT pressures[nCells];
 				sim.getHorizontalSpeeds(horizontalSpeeds);
 				sim.getVerticalSpeeds(verticalSpeeds);
 				sim.getTemperatures(temperatures);
@@ -263,8 +257,29 @@ void mainFrame::OnRun( wxCommandEvent& event )
 					fout << densities[j]-1.0 << "," << temperatures[j] << ","<< horizontalSpeeds[j] << "," << verticalSpeeds[j] << "\n";
 				fout.close();
 			}
-			sim.Step(UNG_FLT(0.00001));
+			if(i<100000)
+				sim.Step(UNG_FLT(0.00001));
 		}
+
+		//check the speed of sound is correct
+		size_t peak1=0;
+		size_t peak2=nHoriz/2;
+		double max1=densities[peak1];
+		double max2=densities[peak2];
+		for(size_t i=0; i< nHoriz/2; ++i)
+		{
+			if(densities[i]>densities[peak1])
+				peak1=i;
+			if(densities[nHoriz/2+i]>densities[peak2])
+				peak2=nHoriz/2+i;
+		}
+		//each grid square is a metre and we have run for 1 second, so half the separation of
+		//the peaks is the speed
+		UNG_FLT speed = UNG_FLT(peak2-peak1)/UNG_FLT(2.0);
+		UNG_FLT theoreticalSpeed=sqrt(1.4*8.3145*temperatures[nHoriz/2]/0.02897);
+		if(abs(speed-theoreticalSpeed) > UNG_FLT(1.0) )
+			throw("Failed Test 6 - Speed of sound not within permitted accuracy");
+
 	}
 #endif
 	wxMessageBox("Done - Tests successful");
