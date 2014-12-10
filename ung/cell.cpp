@@ -2,6 +2,25 @@
 #include"link.h"
 #include<math.h>
 
+
+//This is a fast function approximating raising to the power gamma.
+//It is based on a Taylor expansion around an input value
+//of 110. The results are accurate to +/-0.1 % in the range 
+//400-1300 (input in range 72-167).
+//See the fastPowerGama.xlsx spreadsheet for the calculations.
+//This function uses a value of gamma of 1.40056
+inline double fastPowerGamma( double base )
+{
+	const double centre=110;
+	const double mult0=722.9244931;
+	const double mult1=9.204537527;
+	const double mult2=0.016758953;
+	const double mult3=-3.04424E-05;
+
+	double diff=base-centre;
+	return mult0 + diff*(mult1 + diff*(mult2 + mult3*diff));
+}
+
 Cell::Cell(UNG_FLT volume, UNG_FLT density, UNG_FLT potentialTemperature, UNG_FLT lrSpeed, UNG_FLT udSpeed, UNG_FLT ioSpeed)
 	: m_volume(volume), m_mass(volume*density), m_potentialEnergy(volume*density*potentialTemperature), m_lrSpeed(lrSpeed),
 	m_udSpeed(udSpeed), m_ioSpeed(ioSpeed) 
@@ -98,7 +117,8 @@ void Cell::setPressure()
 	const UNG_FLT P0Term=UNG_FLT(0.0371535);
 	UNG_FLT nMolesPerUnitVol=m_densities.density/UNG_FLT(0.02897);
 	UNG_FLT potentialTemperature=m_potentialEnergy/m_mass;
-	m_pressure=pow(potentialTemperature*nMolesPerUnitVol*UNG_FLT(8.3144621)*P0Term,power);
+	//m_pressure=pow(potentialTemperature*nMolesPerUnitVol*UNG_FLT(8.3144621)*P0Term,power);
+	m_pressure=fastPowerGamma(potentialTemperature*nMolesPerUnitVol*UNG_FLT(8.3144621)*P0Term);
 }
 
 void Cell::setLinks(Link *leftLink, Link *rightLink, Link *topLink, Link *bottomLink)
