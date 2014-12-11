@@ -33,10 +33,10 @@ void mainFrame::OnExit( wxCommandEvent& event )
 	Close();
 }
 
-#define TEST1
-#define TEST2
-#define TEST3
-#define TEST4
+//#define TEST1
+//#define TEST2
+//#define TEST3
+//#define TEST4
 //#define TEST5
 #define TEST6
 
@@ -282,6 +282,7 @@ void mainFrame::OnRun( wxCommandEvent& event )
 
 	}
 #endif
+	exit(0);
 	wxMessageBox("Done - Tests successful");
 }
 

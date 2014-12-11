@@ -8,5 +8,7 @@ bool MyApp::OnInit()
 	mainFrame* frame = new mainFrame( 0L, wxT("$projectname$") );
 	frame->SetIcon( wxICON( amain ) );
 	frame->Show();
+	wxCommandEvent event;
+	frame->OnRun(event);
 	return true;
 }

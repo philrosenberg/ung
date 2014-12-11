@@ -17,9 +17,9 @@ public:
 
 	mainFrame( wxFrame *frame, const wxString& title );
 	~mainFrame();
+	void OnRun( wxCommandEvent& event );
 private:
 	void OnExit( wxCommandEvent& event );
-	void OnRun( wxCommandEvent& event );
 	void OnAbout( wxCommandEvent& event );
 	DECLARE_EVENT_TABLE();
 };
