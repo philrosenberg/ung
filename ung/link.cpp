@@ -33,13 +33,6 @@ Link::~Link()
 void Link::update(UNG_FLT timeStep)
 {
 	m_updateFunc(this, timeStep);
-	/*UNG_FLT pressureDif=(m_cell2->getPressure()-m_cell1->getPressure());
-	UNG_FLT pressureImpulse=-m_area*pressureDif*timeStep/UNG_FLT(2.0);
-	m_parallelImpulse=pressureImpulse;
-	UNG_FLT transferSpeed=(*m_speed1+*m_speed2)/UNG_FLT(2.0);
-	UNG_FLT transferDistance=transferSpeed*timeStep;
-	m_transferVolume=transferDistance*m_area;
-	m_cell1->averageTracerDensities(m_tracerDensities, m_cell1->getTracerDensities(), m_cell2->getTracerDensities());*/
 }
 
 void Link::getLinkProperties( const void *&sourceTracerDensities, UNG_FLT &transferVolume, UNG_FLT &parallelImpulse, UNG_FLT &perpendicularImpulse)
@@ -71,7 +64,3 @@ SolidBoundaryLink::SolidBoundaryLink(Cell *cell, UNG_FLT area, const UNG_FLT *sp
 	m_parallelImpulse=0;
 	m_perpendicularImpulse=0;
 }
-
-//void SolidBoundaryLink::update(UNG_FLT timeStep)
-//{
-//}
