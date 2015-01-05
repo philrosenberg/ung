@@ -124,7 +124,7 @@ void RectangularSimulationSolidEdges::setupLinks( size_t nHoriz, size_t nVert )
 			}
 			else
 			{
-				m_links[i]=new InviscidLink(m_cells[i-nHoriz], m_cells[i], 1.0, m_cells[i-nHoriz]->getUdSpeedPointer(), 
+				m_links[i]=new Link(m_cells[i-nHoriz], m_cells[i], 1.0, m_cells[i-nHoriz]->getUdSpeedPointer(), 
 					m_cells[i]->getUdSpeedPointer());
 				m_cells[i-nHoriz]->setTopLink(m_links[i]);
 				m_cells[i]->setBottomLink(m_links[i]);
@@ -143,7 +143,7 @@ void RectangularSimulationSolidEdges::setupLinks( size_t nHoriz, size_t nVert )
 			}
 			else
 			{
-				m_links[i+nVertLinks]=new InviscidLink(m_cells[i-1],m_cells[i], 1.0, m_cells[i-1]->getLrSpeedPointer(), 
+				m_links[i+nVertLinks]=new Link(m_cells[i-1],m_cells[i], 1.0, m_cells[i-1]->getLrSpeedPointer(), 
 					m_cells[i]->getLrSpeedPointer());
 				m_cells[i-1]->setRightLink(m_links[i+nVertLinks]);
 				m_cells[i]->setLeftLink(m_links[i+nVertLinks]);
@@ -196,7 +196,7 @@ void RectangularSimulationWrappedEdges::setupLinks( size_t nHoriz, size_t nVert 
 			if(i<nHoriz)
 			{
 				//vertical links wrapped round bottom
-				m_links[i]=new InviscidLink(m_cells[m_nCells-nHoriz+i], m_cells[i], 1.0, m_cells[m_nCells-nHoriz+i]->getUdSpeedPointer(), 
+				m_links[i]=new Link(m_cells[m_nCells-nHoriz+i], m_cells[i], 1.0, m_cells[m_nCells-nHoriz+i]->getUdSpeedPointer(), 
 					m_cells[i]->getUdSpeedPointer());
 				m_cells[m_nCells-nHoriz+i]->setTopLink(m_links[i]);
 				m_cells[i]->setBottomLink(m_links[i]);
@@ -204,7 +204,7 @@ void RectangularSimulationWrappedEdges::setupLinks( size_t nHoriz, size_t nVert 
 			else
 			{
 				//vertical links
-				m_links[i]=new InviscidLink(m_cells[i-nHoriz], m_cells[i], 1.0, m_cells[i-nHoriz]->getUdSpeedPointer(), 
+				m_links[i]=new Link(m_cells[i-nHoriz], m_cells[i], 1.0, m_cells[i-nHoriz]->getUdSpeedPointer(), 
 					m_cells[i]->getUdSpeedPointer());
 				m_cells[i-nHoriz]->setTopLink(m_links[i]);
 				m_cells[i]->setBottomLink(m_links[i]);
@@ -212,7 +212,7 @@ void RectangularSimulationWrappedEdges::setupLinks( size_t nHoriz, size_t nVert 
 			if(i%nHoriz==0)
 			{
 				//horizontal links wrapped round end
-				m_links[i+m_nCells]=new InviscidLink(m_cells[i+nHoriz-1],m_cells[i], 1.0, m_cells[i+nHoriz-1]->getLrSpeedPointer(), 
+				m_links[i+m_nCells]=new Link(m_cells[i+nHoriz-1],m_cells[i], 1.0, m_cells[i+nHoriz-1]->getLrSpeedPointer(), 
 					m_cells[i]->getLrSpeedPointer());
 				m_cells[i+nHoriz-1]->setRightLink(m_links[i+m_nCells]);
 				m_cells[i]->setLeftLink(m_links[i+m_nCells]);
@@ -220,7 +220,7 @@ void RectangularSimulationWrappedEdges::setupLinks( size_t nHoriz, size_t nVert 
 			else
 			{
 				//horizontal links
-				m_links[i+m_nCells]=new InviscidLink(m_cells[i-1],m_cells[i], 1.0, m_cells[i-1]->getLrSpeedPointer(), 
+				m_links[i+m_nCells]=new Link(m_cells[i-1],m_cells[i], 1.0, m_cells[i-1]->getLrSpeedPointer(), 
 					m_cells[i]->getLrSpeedPointer());
 				m_cells[i-1]->setRightLink(m_links[i+m_nCells]);
 				m_cells[i]->setLeftLink(m_links[i+m_nCells]);
