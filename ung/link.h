@@ -43,6 +43,8 @@ class BoundaryLink: public Link
 {
 public:
 	BoundaryLink(Cell *cell1, UNG_FLT area, const UNG_FLT *speed, void (*updateFunc)( void *, UNG_FLT ));
+	//virtual void update(UNG_FLT timeStep)=0;
+	//virtual void getLinkProperties( const void *&sourceTracerDensities, UNG_FLT &transferVolume, UNG_FLT &parallelImpulse, UNG_FLT &perpendicularImpulse)=0;
 };
 
 class SolidBoundaryLink: public BoundaryLink
@@ -50,5 +52,8 @@ class SolidBoundaryLink: public BoundaryLink
 	friend void solidBoundaryLinkUpdate(void *, UNG_FLT);
 public:
 	SolidBoundaryLink(Cell *cell1, UNG_FLT area, const UNG_FLT *speed);
+	//virtual void update(UNG_FLT timeStep);
+	//virtual void getLinkProperties( const void *&sourceTracerDensities, UNG_FLT &transferVolume, UNG_FLT &parallelImpulse, UNG_FLT &perpendicularImpulse);
+
 };
 #endif
